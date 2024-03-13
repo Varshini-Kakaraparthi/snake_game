@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'pages/game_page.dart';
+import 'package:snake_game/pages/signin_page.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized(); 
   runApp(snakegame());
@@ -11,7 +12,7 @@ class snakegame extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SnakeGamePage(),
+      home: SignInPage(),
       theme: ThemeData(brightness: Brightness.dark),
     );
   }

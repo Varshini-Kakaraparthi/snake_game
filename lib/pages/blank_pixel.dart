@@ -10,7 +10,7 @@ class BlankPixel extends StatelessWidget{
             child:Container(
                 decoration:BoxDecoration(
                     color:Colors.grey[900],
-                    borderRadius:BorderRadius.circular(7),
+                    borderRadius:BorderRadius.circular(5),
 
                 ),
             ),
