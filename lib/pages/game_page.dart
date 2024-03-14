@@ -115,7 +115,7 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
         {
             //add a head
             //if snake is at right wall,need to re-adjust
-            if(snakePos.last%rowSize==0){
+            if((snakePos.last+1)%rowSize==0){
                 snakePos.add(snakePos.last+1-rowSize);
             }else{
                 snakePos.add(snakePos.last+1);
