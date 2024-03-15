@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:snake_game/pages/game_page.dart';
+import 'package:http/http.dart' as http;
+import 'package:snake_game/pages/home_page.dart';
 import 'package:snake_game/pages/signin_page.dart';
 
 class SignupPage extends StatefulWidget {
@@ -8,6 +10,39 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> signUp() async {
+    final String username = _usernameController.text.trim();
+    final String email = _emailController.text.trim();
+    final String password = _passwordController.text.trim();
+
+    final url = 'http://localhost:8080/signup';
+    final headers = {'Content-Type': 'application/json'};
+    final body = jsonEncode({'username': username, 'email': email, 'password': password});
+
+    try {
+      final response = await http.post(Uri.parse(url), headers: headers, body: body);
+      if (response.statusCode == 200) {
+        // Successful signup, navigate to home page
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      } else {
+        // Handle error response
+        print('Signup failed: ${response.body}');
+        // Optionally, show error message to the user
+      }
+    } catch (e) {
+      // Handle network or server error
+      print('Error during signup: $e');
+      // Optionally, show error message to the user
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,33 +55,29 @@ class _SignupPageState extends State<SignupPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
+              controller: _usernameController,
               decoration: InputDecoration(labelText: 'Username'),
             ),
             SizedBox(height: 20.0),
             TextField(
+              controller: _emailController,
               decoration: InputDecoration(labelText: 'Email'),
             ),
             SizedBox(height: 20.0),
             TextField(
+              controller: _passwordController,
               obscureText: true,
               decoration: InputDecoration(labelText: 'Password'),
             ),
             SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: () {
-                // Implement signup logic here
-                // For simplicity, let's just navigate to the game screen after signup
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SnakeGamePage()),
-                );
-              },
+              onPressed: signUp,
               child: Text('Sign Up'),
             ),
             SizedBox(height: 10.0),
             TextButton(
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => SignInPage()),
                 );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:snake_game/pages/game_page.dart';
+import 'package:snake_game/pages/home_page.dart';
 import 'package:snake_game/pages/signup_page.dart';
 
 void main() {
@@ -18,7 +18,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => SignInPage(),
         '/signup': (context) => SignupPage(),
-        '/game': (context) => SnakeGamePage(),
       },
     );
   }
@@ -51,7 +50,7 @@ class SignInPage extends StatelessWidget {
                 // For simplicity, let's just navigate to the game screen
                  Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SnakeGamePage()),
+                  MaterialPageRoute(builder: (context) => HomePage()),
                 );
               },
               child: Text('Sign In'),

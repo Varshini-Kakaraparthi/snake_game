@@ -13,7 +13,7 @@ class SnakeGamePage extends StatefulWidget {
   _SnakeGamePageState createState() => _SnakeGamePageState();
 }
 
-enum snake_Direction{UP,DOWN,LEFT,RIGHT}
+enum snakeDirection{UP,DOWN,LEFT,RIGHT}
 
 class _SnakeGamePageState extends State<SnakeGamePage> {
   //grid dimensions
@@ -26,11 +26,12 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
   List<int> snakePos=[0,1,2];
 
   //snake initial direction
-  var currentDirection=snake_Direction.RIGHT;
+  var currentDirection=snakeDirection.RIGHT;
 
   //food position
   int foodPos=55;
   int currentScore=0;
+  int highScore=0;
 
   // Define an AudioPlayer object
   final _audioPlayer = AudioPlayer();
@@ -53,6 +54,9 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
       if (gameOver()) {
         timer.cancel();
         _playSound('gameover.wav');
+        if (highScore < currentScore){
+            highScore=currentScore;
+          }
         showDialog(
           context: context, // Pass the BuildContext here
           barrierDismissible: false,
@@ -74,8 +78,8 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
                     newGame();
                     Navigator.pop(context);
                   },
-                  child: Text('Submit'),
                   color: Colors.pink,
+                  child: Text('Submit'),
                 ),
               ],
             );
@@ -94,7 +98,7 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
     setState((){
       snakePos=[0,1,2];
       foodPos=55;
-      currentDirection=snake_Direction.RIGHT;
+      currentDirection=snakeDirection.RIGHT;
       gameHasStarted=false;
       currentScore=0;
     });
@@ -111,11 +115,11 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
 
   void moveSnake(){
     switch (currentDirection){
-        case snake_Direction.RIGHT:
+        case snakeDirection.RIGHT:
         {
             //add a head
             //if snake is at right wall,need to re-adjust
-            if(snakePos.last%rowSize==0){
+            if((snakePos.last+1)%rowSize==0){
                 snakePos.add(snakePos.last+1-rowSize);
             }else{
                 snakePos.add(snakePos.last+1);
@@ -123,7 +127,7 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
         }
         break;
 
-        case snake_Direction.LEFT:
+        case snakeDirection.LEFT:
         {
              //add a head
             //if snake is at right wall,need to re-adjust
@@ -135,7 +139,7 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
         }
         break;
 
-        case snake_Direction.UP:
+        case snakeDirection.UP:
         {
              //add a head
          
@@ -147,7 +151,7 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
         }
         break;
 
-        case snake_Direction.DOWN:
+        case snakeDirection.DOWN:
         {
              //add a head
              if(snakePos.last+rowSize > totalSquares){
@@ -179,14 +183,14 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
         return true;
     }
     return false;
-
+  
 }
 
 
  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           //highscore
@@ -201,30 +205,35 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
                     Text('Current Score'),
                     Text(
                       currentScore.toString(),
-                      style: TextStyle(fontSize: 36),
+                      style: TextStyle(fontSize: 36,),
                     ),
                   ],
                 ),
-                Text('highscores..')
+                Text('highscore:'),
+                Text(
+                  highScore.toString(),
+                  style: TextStyle(fontSize: 36),
+                ),
               ],
             ),
           ),
+
           //gamegrid
           Expanded(
             flex: 3,
             child: GestureDetector(
               onVerticalDragUpdate: (details) {
-                if (details.delta.dy > 0 && currentDirection != snake_Direction.UP) {
-                  currentDirection = snake_Direction.DOWN;
-                } else if (details.delta.dy < 0 && currentDirection != snake_Direction.DOWN) {
-                  currentDirection = snake_Direction.UP;
+                if (details.delta.dy > 0 && currentDirection != snakeDirection.UP) {
+                  currentDirection = snakeDirection.DOWN;
+                } else if (details.delta.dy < 0 && currentDirection != snakeDirection.DOWN) {
+                  currentDirection = snakeDirection.UP;
                 }
               },
               onHorizontalDragUpdate: (details) {
-                if (details.delta.dx > 0 && currentDirection != snake_Direction.LEFT) {
-                  currentDirection = snake_Direction.RIGHT;
-                } else if (details.delta.dx < 0 && currentDirection != snake_Direction.RIGHT) {
-                  currentDirection = snake_Direction.LEFT;
+                if (details.delta.dx > 0 && currentDirection != snakeDirection.LEFT) {
+                  currentDirection = snakeDirection.RIGHT;
+                } else if (details.delta.dx < 0 && currentDirection != snakeDirection.RIGHT) {
+                  currentDirection = snakeDirection.LEFT;
                 }
               },
               child: GridView.builder(
@@ -246,13 +255,11 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
 
           //play button
           Expanded(
-            child: Container(
-              child: Center(
-                child: MaterialButton(
-                  child: Text('PLAY'),
-                  color: gameHasStarted ? Colors.grey : Colors.green,
-                  onPressed: gameHasStarted ? () {} : () => startGame(context), // Pass the context here
-                ),
+            child: Center(
+              child: MaterialButton(
+                color: gameHasStarted ? Colors.grey : Colors.green,
+                onPressed: gameHasStarted ? () {} : () => startGame(context), // Pass the context here
+                child: Text('START'),
               ),
             ),
           ),

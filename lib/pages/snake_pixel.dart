@@ -8,7 +8,7 @@ class SnakePixel extends StatelessWidget {
             padding:const EdgeInsets.all(2.0),
             child:Container(
                 decoration:BoxDecoration(
-                    color:Colors.green,
+                    color:const Color.fromARGB(255, 4, 123, 8),
                     borderRadius:BorderRadius.circular(7),
 
                 ),
