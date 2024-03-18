@@ -9,7 +9,7 @@ class SnakePixel extends StatelessWidget {
             child:Container(
                 decoration:BoxDecoration(
                     color:const Color.fromARGB(255, 4, 123, 8),
-                    borderRadius:BorderRadius.circular(7),
+                    borderRadius:BorderRadius.circular(5),
 
                 ),
             ),

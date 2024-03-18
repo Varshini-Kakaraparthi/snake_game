@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:snake_game/pages/game_page.dart';
+import 'package:snake_game/pages/signin_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -28,18 +29,37 @@ class _HomePageState extends State<HomePage> {
                 // Play button action
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SnakeGamePage()),
+                  MaterialPageRoute(
+                    builder: (context) => SnakeGamePage(
+                      soundOn: _soundOn,
+                      vibrationOn: _vibrationOn,
+                    ),
+                  ),
                 );
               },
-              child: Text('Play'),
+              child: Text(
+                'Play',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                // Exit button action
-                Navigator.pop(context);
-              },
-              child: Text('Exit'),
+              onPressed: (){
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context)=>SignInPage()),
+                  );
+                },
+              child: Text(
+                'Exit',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
             SizedBox(height: 40),
             Text(
@@ -75,22 +95,11 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-      endDrawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              child: Text('Volume'),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-            ),
-            ListTile(
-              title: Text('Volume Level'),
-              trailing: Slider(
+            SizedBox(height: 20),
+            Text('Volume Level', style: TextStyle(fontSize: 16)),
+            Container(
+              width: MediaQuery.of(context).size.width * 3 / 4,
+              child: Slider(
                 value: _volume,
                 onChanged: (newValue) {
                   setState(() {
